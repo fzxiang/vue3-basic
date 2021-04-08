@@ -1,12 +1,14 @@
-import { ref, onMounted, onUnmounted } from 'vue'
+import { reactive, toRefs, onMounted, onUnmounted } from 'vue'
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function useMousePosition () {
-  const clientX = ref(0)
-  const clientY = ref(0)
+  const data = reactive({
+    clientX: 0,
+    clientY: 0
+  })
   const mouseClick = (e: MouseEvent) => {
-    clientX.value = e.clientX
-    clientY.value = e.clientY
+    data.clientX = e.clientX
+    data.clientY = e.clientY
   }
   onMounted(() => {
     document.addEventListener('click', mouseClick)
@@ -15,7 +17,6 @@ export function useMousePosition () {
     document.removeEventListener('click', mouseClick)
   })
   return {
-    clientX,
-    clientY
+    ...toRefs(data)
   }
 }

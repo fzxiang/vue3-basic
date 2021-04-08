@@ -3,6 +3,8 @@
     <h1>{{ count }}</h1>
     <button @click="increase">This is +1 </button>
     <h1> {{ greetings }}</h1>
+    <h1 v-if="loading">加载中。。。</h1>
+    <div v-if="loaded"><img :src="result.message"></div>
     <h1>鼠标点击坐标： X:{{clientX}}, Y:{{clientY}}</h1>
     <button @click="updateGeetings">标题更新 </button>
   </div>
@@ -11,7 +13,12 @@
 <script lang="ts">
 import { reactive, ref, toRefs, watch } from 'vue'
 import { useMousePosition } from '@/hooks/useMousePosition'
+import useURLLoader from '@/hooks/useURLLoader'
 
+interface resultProps {
+  message: string,
+  status: string
+}
 interface DataProps {
   count: number,
   increase: () => void
@@ -32,8 +39,8 @@ export default {
       data.count++
       greetings.value = '标题更改' + data.count
     }
-    watch([greetings, () => data.count], (newVal, oldVal) => {
-      console.log(newVal, oldVal)
+    const { loading, result, loaded } = useURLLoader<resultProps>('https://dog.ceo/api/breeds/image/random')
+    watch([greetings, () => data.count], (newVal) => {
       document.title = newVal[0]
     })
     const { clientX, clientY } = useMousePosition()
@@ -42,7 +49,10 @@ export default {
       greetings,
       updateGeetings,
       clientX,
-      clientY
+      clientY,
+      loading,
+      loaded,
+      result
     }
   }
 }
