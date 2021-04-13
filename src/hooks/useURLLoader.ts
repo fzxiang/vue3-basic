@@ -12,9 +12,9 @@ function useURLLoader<T> (url: string) {
     res.loading = false
     res.loaded = true
     result.value = response.data
-    console.log(response.data)
   }).catch(e => {
     res.error = e
+    res.loading = false
   })
   return {
     result,
