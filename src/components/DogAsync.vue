@@ -9,9 +9,7 @@ export default defineComponent({
   name: 'DogAsync',
   async setup (props) {
     const res = await Axios.get('https://dog.ceo/api/breeds/image/random')
-    return {
-      result: res.data
-    }
+    return { result: res.data }
   }
 })
 </script>
